@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JU Marketing - Class Schedule</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --fg-yellow: #FFD700;
+    --fg-blue: #1a5fa8;
+    --fg-skin: #F4C27F;
+    --fg-red: #cc2200;
+    --fg-white: #fffef0;
+    --fg-dark: #1a1a2e;
+    --fg-green: #2d8a4e;
+    --fg-orange: #e8760a;
+    --shadow: 3px 3px 0px #000;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--fg-blue);
+    background-image:
+      radial-gradient(circle at 20% 80%, rgba(255,215,0,0.15) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(26,95,168,0.3) 0%, transparent 50%),
+      repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(255,255,255,0.03) 60px, rgba(255,255,255,0.03) 61px),
+      repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,255,255,0.03) 60px, rgba(255,255,255,0.03) 61px);
+    min-height: 100vh;
+    font-family: 'Comic Neue', cursive;
+    padding: 20px;
+    overflow-x: hidden;
+  }
+
+  /* STARS / CLOUDS BG */
+  .bg-cloud {
+    position: fixed;
+    background: rgba(255,255,255,0.08);
+    border-radius: 50px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .bg-cloud:nth-child(1) { width:180px; height:50px; top:8%; left:-50px; animation: cloudFloat 18s linear infinite; }
+  .bg-cloud:nth-child(2) { width:120px; height:35px; top:25%; left:-30px; animation: cloudFloat 25s linear infinite 5s; }
+  .bg-cloud:nth-child(3) { width:200px; height:55px; top:60%; left:-60px; animation: cloudFloat 20s linear infinite 10s; }
+
+  @keyframes cloudFloat {
+    from { transform: translateX(-250px); }
+    to { transform: translateX(110vw); }
+  }
+
+  /* HEADER */
+  .header {
+    text-align: center;
+    margin-bottom: 30px;
+    position: relative;
+    z-index: 10;
+    animation: bounceIn 0.8s cubic-bezier(.36,.07,.19,.97) both;
+  }
+
+  @keyframes bounceIn {
+    0% { transform: scale(0) rotate(-10deg); opacity: 0; }
+    60% { transform: scale(1.1) rotate(3deg); opacity: 1; }
+    80% { transform: scale(0.95) rotate(-1deg); }
+    100% { transform: scale(1) rotate(0deg); }
+  }
+
+  .header-bubble {
+    display: inline-block;
+    background: var(--fg-yellow);
+    border: 4px solid #000;
+    border-radius: 20px;
+    padding: 15px 35px;
+    box-shadow: 6px 6px 0 #000;
+    position: relative;
+  }
+  .header-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -22px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 11px solid transparent;
+    border-top-color: #000;
+  }
+  .header-bubble::before {
+    content: '';
+    position: absolute;
+    bottom: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 10px solid transparent;
+    border-top-color: var(--fg-yellow);
+    z-index: 1;
+  }
+
+  .title {
+    font-family: 'Bangers', cursive;
+    font-size: 2.8rem;
+    color: var(--fg-dark);
+    letter-spacing: 3px;
+    line-height: 1;
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.2);
+  }
+  .subtitle {
+    font-size: 0.85rem;
+    color: #333;
+    font-weight: 700;
+    margin-top: 4px;
+    letter-spacing: 1px;
+  }
+
+  /* PETER GRIFFIN */
+  .peter {
+    position: fixed;
+    bottom: -5px;
+    right: 20px;
+    width: 120px;
+    z-index: 100;
+    animation: peterIdle 3s ease-in-out infinite;
+    cursor: pointer;
+    filter: drop-shadow(3px 3px 6px rgba(0,0,0,0.5));
+  }
+  @keyframes peterIdle {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-8px) rotate(1deg); }
+  }
+  .peter:hover { animation: peterDance 0.4s steps(2) infinite; }
+  @keyframes peterDance {
+    0% { transform: translateY(0) rotate(-5deg); }
+    50% { transform: translateY(-15px) rotate(5deg); }
+  }
+
+  /* SPEECH BUBBLE */
+  .speech-bubble {
+    position: fixed;
+    bottom: 140px;
+    right: 20px;
+    background: white;
+    border: 3px solid black;
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    max-width: 160px;
+    z-index: 100;
+    box-shadow: 3px 3px 0 #000;
+    animation: bubblePop 0.3s ease both;
+    display: none;
+  }
+  .speech-bubble.visible { display: block; }
+  .speech-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -14px;
+    right: 30px;
+    border: 7px solid transparent;
+    border-top-color: black;
+  }
+  .speech-bubble::before {
+    content: '';
+    position: absolute;
+    bottom: -9px;
+    right: 31px;
+    border: 6px solid transparent;
+    border-top-color: white;
+    z-index: 1;
+  }
+  @keyframes bubblePop {
+    from { transform: scale(0); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  /* STEWIE */
+  .stewie {
+    position: fixed;
+    bottom: -5px;
+    left: 20px;
+    width: 95px;
+    z-index: 100;
+    animation: stewieIdle 2.5s ease-in-out infinite 1s;
+    cursor: pointer;
+    filter: drop-shadow(3px 3px 6px rgba(0,0,0,0.5));
+    transform: scaleX(-1);
+  }
+  @keyframes stewieIdle {
+    0%, 100% { transform: scaleX(-1) translateY(0); }
+    50% { transform: scaleX(-1) translateY(-6px); }
+  }
+
+  /* DAYS CONTAINER */
+  .days-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    position: relative;
+    z-index: 10;
+    max-width: 900px;
+    margin: 0 auto;
+    padding-bottom: 140px;
+  }
+
+  .day-card {
+    background: var(--fg-white);
+    border: 4px solid #000;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 6px 6px 0 #000;
+    animation: slideInLeft 0.5s cubic-bezier(.36,.07,.19,.97) both;
+    transform-origin: left center;
+  }
+
+  .day-card:nth-child(1) { animation-delay: 0.1s; }
+  .day-card:nth-child(2) { animation-delay: 0.2s; }
+  .day-card:nth-child(3) { animation-delay: 0.3s; }
+  .day-card:nth-child(4) { animation-delay: 0.4s; }
+  .day-card:nth-child(5) { animation-delay: 0.5s; }
+
+  @keyframes slideInLeft {
+    from { transform: translateX(-80px) rotate(-3deg); opacity: 0; }
+    to { transform: translateX(0) rotate(0deg); opacity: 1; }
+  }
+
+  .day-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 18px;
+    border-bottom: 3px solid #000;
+    font-family: 'Bangers', cursive;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    color: var(--fg-white);
+  }
+
+  .day-emoji { font-size: 1.4rem; }
+
+  .sunday    .day-header { background: #cc2200; }
+  .monday    .day-header { background: #1a5fa8; }
+  .tuesday   .day-header { background: #2d8a4e; }
+  .wednesday .day-header { background: #7b2d8b; }
+  .thursday  .day-header { background: #e8760a; }
+
+  .classes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 0;
+  }
+
+  .class-slot {
+    padding: 14px 16px;
+    border-right: 2px dashed rgba(0,0,0,0.15);
+    border-bottom: 2px dashed rgba(0,0,0,0.15);
+    transition: transform 0.15s ease, background 0.15s ease;
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .class-slot::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(255,215,0,0.3);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.2s ease;
+  }
+
+  .class-slot:hover::before { transform: scaleX(1); }
+  .class-slot:hover { transform: scale(1.02); z-index: 5; }
+
+  .slot-code {
+    font-family: 'Bangers', cursive;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    color: var(--fg-blue);
+  }
+  .slot-name {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #111;
+    margin: 2px 0 6px;
+    line-height: 1.2;
+  }
+  .slot-time {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--fg-dark);
+    color: var(--fg-yellow);
+    font-family: 'Bangers', cursive;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    padding: 2px 8px;
+    border-radius: 6px;
+    border: 2px solid #000;
+  }
+  .slot-faculty {
+    font-size: 0.72rem;
+    color: #555;
+    margin-top: 5px;
+    font-style: italic;
+  }
+  .slot-room {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    background: var(--fg-yellow);
+    border: 2px solid #000;
+    border-radius: 8px;
+    font-family: 'Bangers', cursive;
+    font-size: 0.85rem;
+    padding: 1px 7px;
+    box-shadow: 2px 2px 0 #000;
+  }
+
+  /* LEGEND */
+  .legend {
+    position: relative;
+    z-index: 10;
+    max-width: 900px;
+    margin: 0 auto 20px;
+    background: rgba(255,255,255,0.12);
+    border: 3px solid rgba(255,255,255,0.3);
+    border-radius: 14px;
+    padding: 12px 18px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    animation: bounceIn 0.8s 0.6s both;
+  }
+  .legend-title {
+    font-family: 'Bangers', cursive;
+    color: var(--fg-yellow);
+    font-size: 1rem;
+    letter-spacing: 1px;
+    width: 100%;
+  }
+  .legend-item {
+    background: var(--fg-white);
+    border: 2px solid #000;
+    border-radius: 8px;
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    box-shadow: 2px 2px 0 #000;
+  }
+  .legend-item span {
+    font-family: 'Bangers', cursive;
+    color: var(--fg-blue);
+    letter-spacing: 1px;
+    margin-right: 4px;
+  }
+
+  /* QUAGMIRE RUNNING */
+  .quagmire {
+    position: fixed;
+    bottom: 0;
+    left: -120px;
+    width: 100px;
+    z-index: 99;
+    animation: quagiRun 12s linear infinite 4s;
+    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.5));
+  }
+  @keyframes quagiRun {
+    0%   { left: -120px; transform: scaleX(1); }
+    48%  { left: calc(100vw + 120px); transform: scaleX(1); }
+    50%  { left: calc(100vw + 120px); transform: scaleX(-1); }
+    98%  { left: -120px; transform: scaleX(-1); }
+    100% { left: -120px; transform: scaleX(1); }
+  }
+
+  /* PETER SVG INLINE */
+  svg.char { overflow: visible; }
+
+  /* Wiggle for emphasis */
+  @keyframes wiggle {
+    0%,100% { transform: rotate(0deg); }
+    25% { transform: rotate(-4deg); }
+    75% { transform: rotate(4deg); }
+  }
+
+  .day-card:hover .day-header { animation: wiggle 0.4s ease; }
+
+  /* TOOLTIP */
+  .class-slot:hover .slot-faculty {
+    color: #222;
+    font-style: normal;
+    font-weight: 700;
+  }
+
+  /* No class placeholder */
+  .no-class {
+    padding: 14px 16px;
+    color: #aaa;
+    font-size: 0.8rem;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+
+<!-- BG Clouds -->
+<div class="bg-cloud"></div>
+<div class="bg-cloud"></div>
+<div class="bg-cloud"></div>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-bubble">
+    <div class="title">📚 JU MARKETING CLASS SCHEDULE</div>
+    <div class="subtitle">2nd Year · 2nd Semester · MKT 2201–2205</div>
+  </div>
+</div>
+
+<!-- LEGEND -->
+<div class="legend">
+  <div class="legend-title">📋 Course Quick Reference</div>
+  <div class="legend-item"><span>MKT 2201</span>Human Resource Management</div>
+  <div class="legend-item"><span>MKT 2202</span>Business Statistics</div>
+  <div class="legend-item"><span>MKT 2203</span>Export Import Management</div>
+  <div class="legend-item"><span>MKT 2204</span>Insurance &amp; Risk Management</div>
+  <div class="legend-item"><span>MKT 2205</span>Entrepreneurship &amp; Small Enterprise Marketing</div>
+</div>
+
+<!-- DAYS -->
+<div class="days-wrapper">
+
+  <!-- SUNDAY -->
+  <div class="day-card sunday">
+    <div class="day-header">
+      <span class="day-emoji">☀️</span> SUNDAY
+    </div>
+    <div class="classes-grid">
+      <div class="class-slot">
+        <div class="slot-room">Rm 25</div>
+        <div class="slot-code">MKT 2203</div>
+        <div class="slot-name">Export Import Management</div>
+        <div class="slot-time">🕐 12:45–01:55 PM</div>
+        <div class="slot-faculty">Sabakun Naher Shetu · Asst. Prof.</div>
+      </div>
+      <div class="class-slot">
+        <div class="slot-room">Rm 20</div>
+        <div class="slot-code">MKT 2204</div>
+        <div class="slot-name">Insurance &amp; Risk Management</div>
+        <div class="slot-time">🕐 10:15–11:25 AM</div>
+        <div class="slot-faculty">Md. Muzahidul Islam · Asst. Prof.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MONDAY -->
+  <div class="day-card monday">
+    <div class="day-header">
+      <span class="day-emoji">💼</span> MONDAY
+    </div>
+    <div class="classes-grid">
+      <div class="class-slot">
+        <div class="slot-room">Rm 20</div>
+        <div class="slot-code">MKT 2201</div>
+        <div class="slot-name">Human Resource Management</div>
+        <div class="slot-time">🕘 09:00–10:10 AM</div>
+        <div class="slot-faculty">Mamtaj Akter · Assoc. Prof.</div>
+      </div>
+      <div class="class-slot">
+        <div class="slot-room">Rm 20</div>
+        <div class="slot-code">MKT 2202</div>
+        <div class="slot-name">Business Statistics</div>
+        <div class="slot-time">🕧 12:45–01:55 PM</div>
+        <div class="slot-faculty">Md. Shariful Islam · Assoc. Prof.</div>
+      </div>
+      <div class="class-slot">
+        <div class="slot-room">Rm 19</div>
+        <div class="slot-code">MKT 2205</div>
+        <div class="slot-name">Entrepreneurship &amp; Small Enterprise Mktg</div>
+        <div class="slot-time">🕑 02:00–03:10 PM</div>
+        <div class="slot-faculty">Shahpar Shams · Asst. Prof.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TUESDAY -->
+  <div class="day-card tuesday">
+    <div class="day-header">
+      <span class="day-emoji">📊</span> TUESDAY
+    </div>
+    <div class="classes-grid">
+      <div class="class-slot">
+        <div class="slot-room">Rm 20</div>
+        <div class="slot-code">MKT 2203</div>
+        <div class="slot-name">Export Import Management</div>
+        <div class="slot-time">🕦 11:30–12:40 PM</div>
+        <div class="slot-faculty">Sabakun Naher Shetu · Asst. Prof.</div>
+      </div>
+      <div class="class-slot">
+        <div class="slot-room">Rm 19</div>
+        <div class="slot-code">MKT 2204</div>
+        <div class="slot-name">Insurance &amp; Risk Management</div>
+        <div class="slot-time">🕧 12:45–01:55 PM</div>
+        <div class="slot-faculty">Md. Muzahidul Islam · Asst. Prof.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEDNESDAY -->
+  <div class="day-card wednesday">
+    <div class="day-header">
+      <span class="day-emoji">📈</span> WEDNESDAY
+    </div>
+    <div class="classes-grid">
+      <div class="class-slot">
+        <div class="slot-room">Rm 25</div>
+        <div class="slot-code">MKT 2202</div>
+        <div class="slot-name">Business Statistics</div>
+        <div class="slot-time">🕘 09:00–10:10 AM</div>
+        <div class="slot-faculty">Md. Shariful Islam · Assoc. Prof.</div>
+      </div>
+      <div class="class-slot">
+        <div class="slot-room">Rm 25</div>
+        <div class="slot-code">MKT 2205</div>
+        <div class="slot-name">Entrepreneurship &amp; Small Enterprise Mktg</div>
+        <div class="slot-time">🕑 02:00–03:10 PM</div>
+        <div class="slot-faculty">Shahpar Shams · Asst. Prof.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- THURSDAY -->
+  <div class="day-card thursday">
+    <div class="day-header">
+      <span class="day-emoji">🏁</span> THURSDAY
+    </div>
+    <div class="classes-grid">
+      <div class="class-slot">
+        <div class="slot-room">Rm 19</div>
+        <div class="slot-code">MKT 2201</div>
+        <div class="slot-name">Human Resource Management</div>
+        <div class="slot-time">🕙 10:15–11:25 AM</div>
+        <div class="slot-faculty">Mamtaj Akter · Assoc. Prof.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- PETER GRIFFIN SVG (simplified cartoon) -->
+<svg class="peter char" style="position:fixed;bottom:-5px;right:20px;width:120px;z-index:100;animation:peterIdle 3s ease-in-out infinite;cursor:pointer;filter:drop-shadow(3px 3px 6px rgba(0,0,0,0.5));"
+  viewBox="0 0 100 200" xmlns="http://www.w3.org/2000/svg" onclick="showBubble()">
+  <!-- Body -->
+  <ellipse cx="50" cy="130" rx="38" ry="52" fill="#fff" stroke="#000" stroke-width="2.5"/>
+  <!-- Shirt white -->
+  <ellipse cx="50" cy="140" rx="35" ry="42" fill="#f0f0f0" stroke="#000" stroke-width="2"/>
+  <!-- Pants -->
+  <rect x="20" y="158" width="60" height="38" rx="8" fill="#555" stroke="#000" stroke-width="2"/>
+  <!-- Belt -->
+  <rect x="18" y="155" width="64" height="8" rx="4" fill="#8B4513" stroke="#000" stroke-width="2"/>
+  <rect x="45" y="153" width="10" height="12" rx="2" fill="#FFD700" stroke="#000" stroke-width="1.5"/>
+  <!-- Shoes -->
+  <ellipse cx="33" cy="195" rx="16" ry="7" fill="#222" stroke="#000" stroke-width="2"/>
+  <ellipse cx="67" cy="195" rx="16" ry="7" fill="#222" stroke="#000" stroke-width="2"/>
+  <!-- Tie -->
+  <polygon points="50,102 46,130 50,138 54,130" fill="#cc2200" stroke="#000" stroke-width="1.5"/>
+  <!-- Neck -->
+  <rect x="44" y="88" width="12" height="16" rx="4" fill="#F4C27F" stroke="#000" stroke-width="2"/>
+  <!-- Head -->
+  <ellipse cx="50" cy="65" rx="32" ry="34" fill="#F4C27F" stroke="#000" stroke-width="2.5"/>
+  <!-- Hair -->
+  <path d="M22,52 Q25,30 50,28 Q75,30 78,52" fill="#8B6914" stroke="#000" stroke-width="2"/>
+  <!-- Eyes -->
+  <circle cx="38" cy="60" r="7" fill="white" stroke="#000" stroke-width="2"/>
+  <circle cx="62" cy="60" r="7" fill="white" stroke="#000" stroke-width="2"/>
+  <circle cx="39" cy="61" r="4" fill="#1a5fa8"/>
+  <circle cx="63" cy="61" r="4" fill="#1a5fa8"/>
+  <circle cx="40" cy="60" r="1.5" fill="#000"/>
+  <circle cx="64" cy="60" r="1.5" fill="#000"/>
+  <!-- Glasses/brow -->
+  <path d="M31,54 Q38,51 45,54" stroke="#000" stroke-width="2" fill="none"/>
+  <path d="M55,54 Q62,51 69,54" stroke="#000" stroke-width="2" fill="none"/>
+  <!-- Nose -->
+  <ellipse cx="50" cy="68" rx="5" ry="4" fill="#e8a060" stroke="#000" stroke-width="1.5"/>
+  <!-- Mouth (grin) -->
+  <path d="M38,78 Q50,88 62,78" stroke="#000" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <!-- Chin dimple -->
+  <path d="M47,90 Q50,94 53,90" stroke="#c8905a" stroke-width="1.5" fill="none"/>
+  <!-- Arms -->
+  <path d="M16,115 Q5,130 12,150" stroke="#F4C27F" stroke-width="10" stroke-linecap="round" fill="none"/>
+  <path d="M84,115 Q95,130 88,150" stroke="#F4C27F" stroke-width="10" stroke-linecap="round" fill="none"/>
+  <!-- Hands -->
+  <circle cx="11" cy="153" r="8" fill="#F4C27F" stroke="#000" stroke-width="2"/>
+  <circle cx="89" cy="153" r="8" fill="#F4C27F" stroke="#000" stroke-width="2"/>
+</svg>
+
+<!-- STEWIE SVG -->
+<svg class="char" style="position:fixed;bottom:-5px;left:20px;width:90px;z-index:100;animation:stewieIdle 2.5s ease-in-out infinite 1s;cursor:pointer;filter:drop-shadow(3px 3px 6px rgba(0,0,0,0.5));transform:scaleX(-1);"
+  viewBox="0 0 80 180" xmlns="http://www.w3.org/2000/svg">
+  <!-- Body -->
+  <ellipse cx="40" cy="125" rx="26" ry="38" fill="#cc2200" stroke="#000" stroke-width="2"/>
+  <!-- Overalls -->
+  <rect x="18" y="138" width="44" height="28" rx="6" fill="#cc2200" stroke="#000" stroke-width="2"/>
+  <!-- Legs -->
+  <ellipse cx="28" cy="168" rx="11" ry="5" fill="#222" stroke="#000" stroke-width="2"/>
+  <ellipse cx="52" cy="168" rx="11" ry="5" fill="#222" stroke="#000" stroke-width="2"/>
+  <!-- Football head -->
+  <ellipse cx="40" cy="52" rx="22" ry="38" fill="#F4C27F" stroke="#000" stroke-width="2.5"/>
+  <!-- Head ridges (football shape lines) -->
+  <path d="M24,35 Q40,15 56,35" stroke="#d4a060" stroke-width="1.5" fill="none"/>
+  <path d="M21,55 Q40,72 59,55" stroke="#d4a060" stroke-width="1.5" fill="none"/>
+  <!-- Hair -->
+  <path d="M20,30 Q25,15 40,12 Q55,15 60,30" fill="#8B6914" stroke="#000" stroke-width="2"/>
+  <!-- Eyes -->
+  <circle cx="32" cy="48" r="5" fill="white" stroke="#000" stroke-width="2"/>
+  <circle cx="48" cy="48" r="5" fill="white" stroke="#000" stroke-width="2"/>
+  <circle cx="33" cy="49" r="3" fill="#1a5fa8"/>
+  <circle cx="49" cy="49" r="3" fill="#1a5fa8"/>
+  <circle cx="33.5" cy="48.5" r="1" fill="#000"/>
+  <circle cx="49.5" cy="48.5" r="1" fill="#000"/>
+  <!-- Eyebrows (menacing) -->
+  <line x1="27" y1="42" x2="37" y2="44" stroke="#000" stroke-width="2" stroke-linecap="round"/>
+  <line x1="43" y1="44" x2="53" y2="42" stroke="#000" stroke-width="2" stroke-linecap="round"/>
+  <!-- Nose -->
+  <ellipse cx="40" cy="56" rx="3.5" ry="3" fill="#e8a060" stroke="#000" stroke-width="1.5"/>
+  <!-- Mouth (smirk) -->
+  <path d="M33,66 Q40,70 47,65" stroke="#000" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <!-- Neck -->
+  <rect x="35" y="86" width="10" height="12" rx="3" fill="#F4C27F" stroke="#000" stroke-width="1.5"/>
+  <!-- Arms -->
+  <path d="M16,115 Q8,125 12,140" stroke="#F4C27F" stroke-width="8" stroke-linecap="round" fill="none"/>
+  <path d="M64,115 Q72,125 68,140" stroke="#F4C27F" stroke-width="8" stroke-linecap="round" fill="none"/>
+  <circle cx="11" cy="142" r="6" fill="#F4C27F" stroke="#000" stroke-width="1.5"/>
+  <circle cx="69" cy="142" r="6" fill="#F4C27F" stroke="#000" stroke-width="1.5"/>
+</svg>
+
+<!-- QUAGMIRE SVG (simplified, running) -->
+<svg class="quagmire char" viewBox="0 0 80 160" xmlns="http://www.w3.org/2000/svg">
+  <!-- Body -->
+  <ellipse cx="40" cy="105" rx="24" ry="35" fill="#4a90d9" stroke="#000" stroke-width="2"/>
+  <!-- Pants -->
+  <rect x="20" y="125" width="40" height="28" rx="5" fill="#2c3e50" stroke="#000" stroke-width="2"/>
+  <!-- Legs running -->
+  <line x1="28" y1="148" x2="18" y2="165" stroke="#222" stroke-width="9" stroke-linecap="round"/>
+  <line x1="52" y1="148" x2="62" y2="165" stroke="#222" stroke-width="9" stroke-linecap="round"/>
+  <!-- Head (big jaw) -->
+  <ellipse cx="40" cy="55" rx="22" ry="26" fill="#F4C27F" stroke="#000" stroke-width="2.5"/>
+  <!-- BIG JAW -->
+  <path d="M22,68 Q40,90 58,68" fill="#F4C27F" stroke="#000" stroke-width="2"/>
+  <!-- Hair slicked back -->
+  <path d="M20,42 Q30,25 50,28 Q60,38 62,42" fill="#1a1a1a" stroke="#000" stroke-width="2"/>
+  <!-- Eyes -->
+  <circle cx="33" cy="52" r="5" fill="white" stroke="#000" stroke-width="2"/>
+  <circle cx="47" cy="52" r="5" fill="white" stroke="#000" stroke-width="2"/>
+  <circle cx="34" cy="53" r="3" fill="#1a5fa8"/>
+  <circle cx="48" cy="53" r="3" fill="#1a5fa8"/>
+  <!-- Eyebrows (seductive) -->
+  <path d="M28,46 Q33,43 38,46" stroke="#000" stroke-width="2" fill="none"/>
+  <path d="M42,46 Q47,43 52,46" stroke="#000" stroke-width="2" fill="none"/>
+  <!-- Nose -->
+  <ellipse cx="40" cy="60" rx="3" ry="2.5" fill="#e8a060" stroke="#000" stroke-width="1.5"/>
+  <!-- Grin -->
+  <path d="M28,72 Q40,82 52,72" stroke="#000" stroke-width="2.5" fill="white"/>
+  <!-- Arms running -->
+  <path d="M18,100 Q5,110 10,125" stroke="#F4C27F" stroke-width="8" stroke-linecap="round" fill="none"/>
+  <path d="M62,100 Q75,90 70,110" stroke="#F4C27F" stroke-width="8" stroke-linecap="round" fill="none"/>
+</svg>
+
+<!-- SPEECH BUBBLE -->
+<div class="speech-bubble" id="bubble">
+  Giggity! Don't miss your classes! 📚
+</div>
+
+<script>
+  const quotes = [
+    "Giggity! Don't miss class! 📚",
+    "Freakin' sweet schedule! 🎉",
+    "Shut up Meg... go study! 📖",
+    "This is worse than that time I... anyway, study! 😅",
+    "Holy crap! Room 25 again?! 😱",
+    "Giggity giggity goo! A+ for you! ⭐",
+    "Don't be a Meg. Attend ALL classes! 💪"
+  ];
+
+  function showBubble() {
+    const bubble = document.getElementById('bubble');
+    bubble.textContent = quotes[Math.floor(Math.random() * quotes.length)];
+    bubble.classList.add('visible');
+    setTimeout(() => bubble.classList.remove('visible'), 3000);
+  }
+
+  // Auto show on load after delay
+  setTimeout(showBubble, 1500);
+</script>
+</body>
+</html>
